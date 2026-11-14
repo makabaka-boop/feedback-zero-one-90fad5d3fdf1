@@ -24,8 +24,8 @@ def check(raw, expected_path):
         return (expected_path == '$', 'decode error -> $')
     try:
         data = jsonstrict.loads(text)
-        xml, queries = service.validate_input(data)
-        service.run(xml, queries)
+        xml, queries, merge = service.validate_input(data)
+        service.run(xml, queries, merge)
     except Reject as exc:
         return (exc.path == expected_path,
                 'path %r (want %r): %s' % (exc.path, expected_path, exc.message))
@@ -81,6 +81,29 @@ for raw, path in [
     (b'{"xml":"<r/>","queries":[null]}', '$.queries[0]'),
     (b'{"xml":"<r/>","queries":[["/r"]]}', '$.queries[0]'),
     (b'{"xml":"<r/>","queries":["/r",2]}', '$.queries[1]'),
+    # -- merge member schema
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":1}', '$.merge'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":[]}', '$.merge'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":null}', '$.merge'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":"x"}', '$.merge'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":{}}', '$.merge.base'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":{"other":"<r id=\'r\'/>"}}',
+     '$.merge.base'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":{"base":"<r id=\'r\'/>"}}',
+     '$.merge.other'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":{"base":1,"other":"<r id=\'r\'/>"}}',
+     '$.merge.base'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":{"base":"<r id=\'r\'/>","other":2}}',
+     '$.merge.other'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":'
+     b'{"base":"<r id=\'r\'/>","other":"<r id=\'r\'/>","extra":1}}',
+     '$.merge.extra'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":'
+     b'{"base":"<r id=\'r\'/>","other":"<r id=\'r\'/>","base":"<r id=\'r\'/>"}}',
+     '$.merge.base'),
+    (b'{"xml":"<r id=\'r\'/>","queries":[],"merge":{"base":"<r id=\'r\'/>",'
+     b'"other":"<r id=\'r\'/>"},"merge":{"base":"<r id=\'r\'/>","other":"<r id=\'r\'/>"}}',
+     '$.merge'),
     # -- lone surrogates
     (b'{"xml":"<r/>","queries":["\\ud800"]}', '$.queries[0]'),
     (b'{"xml":"<r/>","queries":["\\udfff"]}', '$.queries[0]'),

@@ -5,16 +5,23 @@ Usage:
 
     python3 main.py INPUT_JSON OUTPUT_JSON
 
-INPUT_JSON must be a UTF-8 JSON object with exactly two members:
+INPUT_JSON must be a UTF-8 JSON object with two members plus an
+optional third:
 
-    {"xml": "<xml string>", "queries": ["<xpath>", ...]}
+    {"xml": "<xml string>", "queries": ["<xpath>", ...],
+     "merge": {"base": "<xml string>", "other": "<xml string>"}}
 
-On success the results array (one entry per query, in order; each entry
-is a list of {"path": [...], "value": "..."} objects) is written to
+With "merge" present the three branch trees ("xml" is the local branch)
+are merged first; the output is then
+{"xml": "<merged xml>", "results": [...]} instead of the plain results
+array.  Conflicts reject with path "$.merge".
+
+On success the results (one entry per query, in order; each entry
+is a list of {"path": [...], "value": "..."} objects) are written to
 OUTPUT_JSON as UTF-8 JSON, replacing it atomically.  On any rejection
-(JSON syntax, schema, XML or query errors) nothing is written -- the old
-OUTPUT_JSON is kept -- and an error object with the offending field path
-is printed to stderr:
+(JSON syntax, schema, XML or query errors, merge conflicts) nothing is
+written -- the old OUTPUT_JSON is kept -- and an error object with the
+offending field path is printed to stderr:
 
     {"error": {"path": "$.queries[0]", "message": "..."}}
 
@@ -63,8 +70,8 @@ def main(argv):
         except UnicodeDecodeError:
             raise Reject('$', 'input is not valid UTF-8')
         data = jsonstrict.loads(text)
-        xml, queries = service.validate_input(data)
-        results = service.run(xml, queries)
+        xml, queries, merge = service.validate_input(data)
+        results = service.run(xml, queries, merge)
     except Reject as exc:
         _report(exc.path, exc.message)
         return 1

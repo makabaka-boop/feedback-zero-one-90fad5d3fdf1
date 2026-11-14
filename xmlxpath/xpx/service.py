@@ -1,16 +1,18 @@
-"""Top-level request handling: validate the input object, run the queries."""
+"""Top-level request handling: validate the input object, optionally
+merge the offline branches, run the queries."""
 
 from . import checker, evaluator, jsonstrict, parser, xmlmodel
+from . import merge as merger
 from .errors import QueryError, Reject
 from .jsonstrict import keypath
 
 
 def validate_input(data):
-    """Check the decoded JSON object; return ``(xml, queries)``."""
+    """Check the decoded JSON object; return ``(xml, queries, merge)``."""
     if not isinstance(data, dict):
         raise Reject('$', 'top-level value must be an object')
     for key in data:
-        if key not in ('xml', 'queries'):
+        if key not in ('xml', 'queries', 'merge'):
             raise Reject(keypath('$', key), 'unknown member')
     if 'xml' not in data:
         raise Reject('$.xml', 'missing member')
@@ -25,12 +27,41 @@ def validate_input(data):
     for i, q in enumerate(queries):
         if not isinstance(q, str):
             raise Reject('$.queries[%d]' % i, 'query must be a string')
-    return xml, queries
+    merge = None
+    if 'merge' in data:
+        merge = _validate_merge(data['merge'])
+    return xml, queries, merge
 
 
-def run(xml, queries):
-    """Evaluate *queries* against *xml*; return the results array."""
-    doc = xmlmodel.parse(xml)
+def _validate_merge(value):
+    """Check the optional ``merge`` member; return ``(base, other)``."""
+    if not isinstance(value, dict):
+        raise Reject('$.merge', 'member must be an object')
+    for key in value:
+        if key not in ('base', 'other'):
+            raise Reject(keypath('$.merge', key), 'unknown member')
+    for name in ('base', 'other'):
+        if name not in value:
+            raise Reject('$.merge.%s' % name, 'missing member')
+        if not isinstance(value[name], str):
+            raise Reject('$.merge.%s' % name, 'member must be a string')
+    return value['base'], value['other']
+
+
+def run(xml, queries, merge=None):
+    """Evaluate *queries* against *xml*; return the results array.
+
+    When *merge* is ``(base, other)`` the three branch trees (*xml* is
+    the local branch) are merged first and the return value is
+    ``{"xml": <merged xml>, "results": <results array>}`` instead.
+    """
+    if merge is None:
+        doc = xmlmodel.parse(xml)
+        merged_xml = None
+    else:
+        base_xml, other_xml = merge
+        merged_xml = merger.merge_trees(xml, base_xml, other_xml)
+        doc = xmlmodel.parse(merged_xml)
 
     # 1. validate the full syntax and subset of every query first
     asts = []
@@ -61,7 +92,9 @@ def run(xml, queries):
             {'path': xmlmodel.path_of(el), 'value': xmlmodel.string_value(el)}
             for el in elements
         ])
-    return results
+    if merge is None:
+        return results
+    return {'xml': merged_xml, 'results': results}
 
 
 def _unique_elements(nodes):
@@ -74,7 +107,7 @@ def _unique_elements(nodes):
 
 
 def run_json_text(text):
-    """Convenience wrapper: raw JSON text in, results array out."""
+    """Convenience wrapper: raw JSON text in, results out."""
     data = jsonstrict.loads(text)
-    xml, queries = validate_input(data)
-    return run(xml, queries)
+    xml, queries, merge = validate_input(data)
+    return run(xml, queries, merge)

@@ -1,0 +1,19 @@
+{
+  "name": "unconstrained new siblings ordered by id code point",
+  "input": {
+    "xml": "<r id=\"r\"><p id=\"p\"/><s id=\"s\"><m id=\"m\"/></s><q id=\"q\"><n id=\"n\"/></q></r>",
+    "queries": ["/r/q/*[1]", "/r/q/*[2]", "/r/q/m/following-sibling::*"],
+    "merge": {
+      "base": "<r id=\"r\"><p id=\"p\"><n id=\"n\"/></p><s id=\"s\"><m id=\"m\"/></s><q id=\"q\"/></r>",
+      "other": "<r id=\"r\"><p id=\"p\"><n id=\"n\"/></p><s id=\"s\"/><q id=\"q\"><m id=\"m\"/></q></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><p id=\"p\"/><s id=\"s\"/><q id=\"q\"><m id=\"m\"/><n id=\"n\"/></q></r>",
+    "results": [
+      [{"path": [2, 0], "value": ""}],
+      [{"path": [2, 1], "value": ""}],
+      [{"path": [2, 1], "value": ""}]
+    ]
+  }
+}

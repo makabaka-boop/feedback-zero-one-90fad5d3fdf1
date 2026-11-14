@@ -1,0 +1,12 @@
+{
+  "name": "name conflict: both branches renamed differently",
+  "input": {
+    "xml": "<r id=\"r\"><b id=\"a\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<r id=\"r\"><c id=\"a\"/></r>"
+    }
+  },
+  "reject": "$.merge"
+}

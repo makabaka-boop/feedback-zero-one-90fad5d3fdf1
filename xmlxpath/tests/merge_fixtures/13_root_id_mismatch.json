@@ -1,0 +1,12 @@
+{
+  "name": "root ids differ while the id sets are equal",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<a id=\"a\"><r id=\"r\"/></a>"
+    }
+  },
+  "reject": "$.merge"
+}

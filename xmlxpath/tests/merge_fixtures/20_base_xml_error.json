@@ -1,0 +1,12 @@
+{
+  "name": "malformed base XML locates the whole $.merge.base field",
+  "input": {
+    "xml": "<r id=\"r\"/>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\">",
+      "other": "<r id=\"r\"/>"
+    }
+  },
+  "reject": "$.merge.base"
+}

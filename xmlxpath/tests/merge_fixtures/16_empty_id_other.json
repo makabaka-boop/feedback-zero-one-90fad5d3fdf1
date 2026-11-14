@@ -1,0 +1,12 @@
+{
+  "name": "empty id in the other tree rejects $.merge.other",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<r id=\"\"><a id=\"a\"/></r>"
+    }
+  },
+  "reject": "$.merge.other"
+}

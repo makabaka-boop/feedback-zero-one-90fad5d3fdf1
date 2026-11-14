@@ -1,0 +1,19 @@
+{
+  "name": "merged text and attributes are escaped so re-parsing is identical",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"a&#9;b\">t &lt;&amp;&gt; ]]&gt;</a></r>",
+    "queries": ["/r/a", "/r/a[@x='a b']", "/r/a[not(@x='a b')]"],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"a&#9;b\">t &lt;&amp;&gt; ]]&gt;</a></r>",
+    "results": [
+      [{"path": [0], "value": "t <&> ]]>"}],
+      [],
+      [{"path": [0], "value": "t <&> ]]>"}]
+    ]
+  }
+}

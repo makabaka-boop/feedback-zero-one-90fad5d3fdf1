@@ -1,0 +1,19 @@
+{
+  "name": "name and text merged; identical branch changes win together",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\">new</a><c id=\"c\" k=\"2\"/></r>",
+    "queries": ["/r/b", "/r/a", "/r/c[@k='2']"],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\">old</a><c id=\"c\" k=\"1\"/></r>",
+      "other": "<r id=\"r\"><b id=\"a\">old</b><c id=\"c\" k=\"2\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><b id=\"a\">new</b><c id=\"c\" k=\"2\"/></r>",
+    "results": [
+      [{"path": [0], "value": "new"}],
+      [],
+      [{"path": [1], "value": ""}]
+    ]
+  }
+}

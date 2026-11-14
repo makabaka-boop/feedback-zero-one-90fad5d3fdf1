@@ -1,0 +1,12 @@
+{
+  "name": "text mixed with element children (whitespace counts) in the local tree",
+  "input": {
+    "xml": "<r id=\"r\"> <a id=\"a\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"/></r>"
+    }
+  },
+  "reject": "$.xml"
+}

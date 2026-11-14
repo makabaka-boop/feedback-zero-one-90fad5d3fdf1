@@ -1,0 +1,12 @@
+{
+  "name": "parent cycle: each branch moves the other element",
+  "input": {
+    "xml": "<r id=\"r\"><b id=\"b\"><a id=\"a\"/></b></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/><b id=\"b\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"><b id=\"b\"/></a></r>"
+    }
+  },
+  "reject": "$.merge"
+}

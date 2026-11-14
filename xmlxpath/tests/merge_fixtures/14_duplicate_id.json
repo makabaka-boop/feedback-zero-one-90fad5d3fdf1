@@ -1,0 +1,12 @@
+{
+  "name": "duplicate id in the local tree rejects the $.xml field",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"r\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"/></r>"
+    }
+  },
+  "reject": "$.xml"
+}

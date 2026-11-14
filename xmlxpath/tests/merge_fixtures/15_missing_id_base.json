@@ -1,0 +1,12 @@
+{
+  "name": "element without id in the base tree rejects $.merge.base",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r><a id=\"a\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"/></r>"
+    }
+  },
+  "reject": "$.merge.base"
+}

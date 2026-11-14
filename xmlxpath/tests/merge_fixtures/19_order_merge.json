@@ -1,0 +1,18 @@
+{
+  "name": "sibling reorder merged from the changed branch",
+  "input": {
+    "xml": "<r id=\"r\"><c id=\"c\"/><a id=\"a\"/><b id=\"b\"/></r>",
+    "queries": ["/r/*[1]", "/r/*[last()]"],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/><b id=\"b\"/><c id=\"c\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"/><b id=\"b\"/><c id=\"c\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><c id=\"c\"/><a id=\"a\"/><b id=\"b\"/></r>",
+    "results": [
+      [{"path": [0], "value": ""}],
+      [{"path": [2], "value": ""}]
+    ]
+  }
+}

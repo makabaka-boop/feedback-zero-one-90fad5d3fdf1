@@ -1,0 +1,12 @@
+{
+  "name": "mixed content after the merge is a conflict",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\">x</a><b id=\"b\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/><b id=\"b\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"><b id=\"b\"/></a></r>"
+    }
+  },
+  "reject": "$.merge"
+}

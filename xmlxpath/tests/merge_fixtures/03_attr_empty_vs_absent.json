@@ -1,0 +1,19 @@
+{
+  "name": "attribute set to an empty string is kept (not a deletion)",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"\"/></r>",
+    "queries": ["/r/a[@x]", "/r/a[not(@x)]", "/r/a[@x='']"],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\" x=\"1\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\" x=\"1\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"\"/></r>",
+    "results": [
+      [{"path": [0], "value": ""}],
+      [],
+      [{"path": [0], "value": ""}]
+    ]
+  }
+}

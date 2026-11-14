@@ -1,0 +1,12 @@
+{
+  "name": "text conflict: both branches edited the text differently",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\">2</a></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\">1</a></r>",
+      "other": "<r id=\"r\"><a id=\"a\">3</a></r>"
+    }
+  },
+  "reject": "$.merge"
+}

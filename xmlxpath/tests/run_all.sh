@@ -8,5 +8,6 @@ python3 tests/test_attr_order.py
 python3 tests/test_reject.py
 python3 tests/test_spec_conformance.py
 python3 tests/test_valid.py
+python3 tests/test_merge.py
 python3 tests/test_cli.py
 echo "ALL TESTS PASSED"

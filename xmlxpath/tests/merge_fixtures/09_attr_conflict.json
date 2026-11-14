@@ -1,0 +1,12 @@
+{
+  "name": "attribute conflict: both branches changed differently",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"2\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\" x=\"1\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\" x=\"3\"/></r>"
+    }
+  },
+  "reject": "$.merge"
+}

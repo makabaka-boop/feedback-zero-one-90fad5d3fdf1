@@ -1,0 +1,19 @@
+{
+  "name": "move: element relocated to another parent (one branch changed)",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\"/><c id=\"c\"><b id=\"b\">bee</b></c></r>",
+    "queries": ["/r/c/b", "/r/a/b", "//b/parent::*"],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"><b id=\"b\">bee</b></a><c id=\"c\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"><b id=\"b\">bee</b></a><c id=\"c\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><a id=\"a\"/><c id=\"c\"><b id=\"b\">bee</b></c></r>",
+    "results": [
+      [{"path": [1, 0], "value": "bee"}],
+      [],
+      [{"path": [1], "value": "bee"}]
+    ]
+  }
+}

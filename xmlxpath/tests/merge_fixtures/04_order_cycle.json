@@ -1,0 +1,12 @@
+{
+  "name": "ordering cycle: base a,b,c / local b,a,c / other a,c,b",
+  "input": {
+    "xml": "<r id=\"r\"><b id=\"b\"/><a id=\"a\"/><c id=\"c\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/><b id=\"b\"/><c id=\"c\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\"/><c id=\"c\"/><b id=\"b\"/></r>"
+    }
+  },
+  "reject": "$.merge"
+}

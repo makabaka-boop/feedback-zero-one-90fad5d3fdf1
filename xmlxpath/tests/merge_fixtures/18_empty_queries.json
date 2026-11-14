@@ -1,0 +1,15 @@
+{
+  "name": "empty queries still returns the merged tree",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"2\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\" x=\"1\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\" x=\"1\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><a id=\"a\" x=\"2\"/></r>",
+    "results": []
+  }
+}

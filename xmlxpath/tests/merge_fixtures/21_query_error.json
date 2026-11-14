@@ -1,0 +1,12 @@
+{
+  "name": "query errors keep the zero-based $.queries[i] path after a merge",
+  "input": {
+    "xml": "<r id=\"r\"/>",
+    "queries": ["/r", "$x"],
+    "merge": {
+      "base": "<r id=\"r\"/>",
+      "other": "<r id=\"r\"/>"
+    }
+  },
+  "reject": "$.queries[1]"
+}

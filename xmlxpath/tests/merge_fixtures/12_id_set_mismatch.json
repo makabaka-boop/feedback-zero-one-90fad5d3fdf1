@@ -1,0 +1,12 @@
+{
+  "name": "id sets differ across the trees",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\"/></r>",
+    "queries": [],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\"/></r>",
+      "other": "<r id=\"r\"><a id=\"z\"/></r>"
+    }
+  },
+  "reject": "$.merge"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "attribute deletion: missing differs from empty string",
+  "input": {
+    "xml": "<r id=\"r\"><a id=\"a\" y=\"2\"/></r>",
+    "queries": ["/r/a[@x]", "/r/a[not(@x)]", "/r/a[@y='2']"],
+    "merge": {
+      "base": "<r id=\"r\"><a id=\"a\" x=\"1\" y=\"2\"/></r>",
+      "other": "<r id=\"r\"><a id=\"a\" x=\"1\" y=\"2\"/></r>"
+    }
+  },
+  "expect": {
+    "xml": "<r id=\"r\"><a id=\"a\" y=\"2\"/></r>",
+    "results": [
+      [],
+      [{"path": [0], "value": ""}],
+      [{"path": [0], "value": ""}]
+    ]
+  }
+}
